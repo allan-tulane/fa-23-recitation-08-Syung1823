@@ -12,9 +12,32 @@ def shortest_shortest_path(graph, source):
       a dict where each key is a vertex and the value is a tuple of
       (shortest path weight, shortest path number of edges). See test case for example.
     """
-    ### TODO
-    pass
+    vis = dict()
+    fron = []
+    edges = dict()
+    edges['s'] = 0
+    heappush(fron, (0, source))
+    while len(fron) != 0:
+        dis, node = heappop(fron)
+      
+        if node in vis:
+            continue
+        
+        vis[node] = (dis,edges[node])
+        
+
+        for n, w in graph[node]:
+            if n in edges:
+                edges[n] = min(edges[node] + 1, edges[n])
+            else:
+              edges[n] = edges[node] + 1
+            heappush(fron, (dis + w, n))
     
+    
+    return vis
+
+
+
 
     
     
@@ -24,8 +47,42 @@ def bfs_path(graph, source):
       a dict where each key is a vertex and the value is the parent of 
       that vertex in the shortest path tree.
     """
-    ###TODO
-    pass
+    vis = set()
+    fron = set()
+    path = dict()
+    fron.add(source)
+
+
+    while len(fron) != 0:
+        for i in fron:
+            node = i
+            break
+        if node in vis:
+            fron.pop(0)
+            continue
+        else:
+            vis = vis|fron
+        temp = []
+        for node in fron:
+            for n in graph[node]:
+                if n in vis:
+                    continue
+                else:
+                    path[n] = node
+                    temp.append(n)
+        fron.clear()
+        fron = set(temp)
+
+    return path
+
+
+
+   
+        
+
+
+
+
 
 def get_sample_graph():
      return {'s': {'a', 'b'},
@@ -34,15 +91,23 @@ def get_sample_graph():
             'c': {'a', 'd'},
             'd': {}
             }
-
+graph = get_sample_graph()
+parents = bfs_path(graph, 's')  
+print(parents)
 
     
 def get_path(parents, destination):
-    """
-    Returns:
-      The shortest path from the source node to this destination node 
-      (excluding the destination node itself). See test_get_path for an example.
-    """
-    ###TODO
-    pass
+    temp = destination
+    prev = ''
+    final = ''
+    while True:
+        if temp =='s':
+            break
+        else:
+            temp = parents[temp]
+            final += temp
+
+
+    return final[::-1]
+    
 
